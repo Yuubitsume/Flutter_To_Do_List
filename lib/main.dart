@@ -1,6 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+    await const FirebaseOptions(
+    apiKey: 'AIzaSyAvuwj2MolQ-5SdGvJAR9Hez3tfFjwPQh0',
+    appId: '1:825681413946:web:4566d8696582d43dc67203',
+    messagingSenderId: '825681413946',
+    projectId: 'to-do-list-app-6869c',
+    authDomain: 'to-do-list-app-6869c.firebaseapp.com',
+    storageBucket: 'to-do-list-app-6869c.appspot.com',
+    measurementId: 'G-MBXXFXH4JW',
+);
+ runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
 
@@ -9,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'To-Do List',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: ToDoList(title: 'My To-Do List'),
     );
@@ -28,7 +41,7 @@ class ToDoList extends StatefulWidget {
 class _ToDoListState extends State<ToDoList> {
   List<String> _tasks = [];
 
-  TextEditingController _taskController = TextEditingController();
+  final TextEditingController _taskController = TextEditingController();
 
   @override
   void dispose() {
