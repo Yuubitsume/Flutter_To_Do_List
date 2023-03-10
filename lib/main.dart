@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 
 void main() async {
+
     await const FirebaseOptions(
     apiKey: 'AIzaSyAvuwj2MolQ-5SdGvJAR9Hez3tfFjwPQh0',
     appId: '1:825681413946:web:4566d8696582d43dc67203',
