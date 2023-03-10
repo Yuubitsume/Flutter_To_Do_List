@@ -1,19 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+//import 'package:google_fonts/google_fonts.dart';
+
+import 'auth/auth.dart';
 import 'firebase_options.dart';
 
 void main() async {
-
-    await const FirebaseOptions(
-    apiKey: 'AIzaSyAvuwj2MolQ-5SdGvJAR9Hez3tfFjwPQh0',
-    appId: '1:825681413946:web:4566d8696582d43dc67203',
-    messagingSenderId: '825681413946',
-    projectId: 'to-do-list-app-6869c',
-    authDomain: 'to-do-list-app-6869c.firebaseapp.com',
-    storageBucket: 'to-do-list-app-6869c.appspot.com',
-    measurementId: 'G-MBXXFXH4JW',
-);
- runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,15 +21,178 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'To-Do List',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        //textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        primarySwatch: Colors.blue,
       ),
-      home: ToDoList(title: 'My To-Do List'),
+     home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return HomeScreen();
+          } else {
+            return const AuthScreen();
+          }
+        },
+      ),
     );
   }
 }
 
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+/*Partie Authentification Screen */
+
+class _AuthScreenState extends State<AuthScreen> {
+  final bool _isLogin = false;
+  bool _loading = false;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  handleSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+    final email = _emailController.value.text;
+    final password = _passwordController.value.text;
+
+    setState(() => _loading = true);
+
+    //Check if is login or register
+    if (_isLogin) {
+      await Auth().signInWithEmailAndPassword(email, password);
+    } else {
+      await Auth().registerWithEmailAndPassword(email, password);
+    }
+
+    setState(() => _loading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            //Add form to key to the Form Widget
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Log In",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  //Assign controller
+                  controller: _emailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
+                    focusColor: Colors.black,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  //Assign controller
+                  controller: _passwordController,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Password',
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  onPressed: () => handleSubmit(),
+                  child: _loading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(_isLogin ? 'Login' : 'Register'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/*Partie HomeScreen login */
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Screen'),
+        backgroundColor: Colors.black,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              //Use this to Log Out user
+              FirebaseAuth.instance.signOut();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+            ),
+            child: const Text('Sign Out'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/*Partie to-do-list */
+
 class ToDoList extends StatefulWidget {
-  ToDoList({Key? key, required this.title}) : super(key: key);
+  const ToDoList({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -75,7 +236,7 @@ class _ToDoListState extends State<ToDoList> {
           child: ListTile(
             title: Text(_tasks[index]),
             trailing: IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () {
                 _removeTask(index);
       },
@@ -91,7 +252,7 @@ class _ToDoListState extends State<ToDoList> {
   Widget _buildAddTaskForm() {
     return TextField(
       controller: _taskController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Add a new task',
       ),
       onSubmitted: (value) {
@@ -109,7 +270,7 @@ class _ToDoListState extends State<ToDoList> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: _buildAddTaskForm(),
           ),
           Expanded(
