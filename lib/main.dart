@@ -4,17 +4,22 @@ import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 import 'auth/auth.dart';
+import 'auth/register.dart';
 import 'firebase_options.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,8 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            return const ToDoList(
+              title: 'Your TodoList');
           } else {
             return const AuthScreen();
           }
@@ -37,6 +43,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -63,9 +70,9 @@ class _AuthScreenState extends State<AuthScreen> {
 
     //Check if is login or register
     if (_isLogin) {
-      await Auth().signInWithEmailAndPassword(email, password);
-    } else {
       await Auth().registerWithEmailAndPassword(email, password);
+    } else {
+      await Auth().signInWithEmailAndPassword(email, password);
     }
 
     setState(() => _loading = false);
@@ -134,7 +141,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -151,6 +158,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         )
                       : Text(_isLogin ? 'Login' : 'Register'),
                 ),
+                const SizedBox(height: 20), 
               ],
             ),
           ),
@@ -163,6 +171,8 @@ class _AuthScreenState extends State<AuthScreen> {
 /*Partie HomeScreen login */
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,6 +187,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               //Use this to Log Out user
               FirebaseAuth.instance.signOut();
+               
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
@@ -197,11 +208,12 @@ class ToDoList extends StatefulWidget {
   final String title;
 
   @override
+  // ignore: library_private_types_in_public_api
   _ToDoListState createState() => _ToDoListState();
 }
 
 class _ToDoListState extends State<ToDoList> {
-  List<String> _tasks = [];
+  final List<String> _tasks = [];
 
   final TextEditingController _taskController = TextEditingController();
 
@@ -240,6 +252,7 @@ class _ToDoListState extends State<ToDoList> {
               onPressed: () {
                 _removeTask(index);
       },
+      
     ),
   ),
 ),
@@ -281,3 +294,4 @@ class _ToDoListState extends State<ToDoList> {
     );
   }
 }
+
