@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'auth.dart';
 
-class _RegistercreenState extends State<AuthScreen> {
+class RegisterScreen extends State<AuthScreen> {
   final bool _isLogin = false;
   bool _loading = false;
   final _formKey = GlobalKey<FormState>();
@@ -22,15 +22,13 @@ class _RegistercreenState extends State<AuthScreen> {
 
     //Check if is login or register
     if (_isLogin) {
-      await Auth().registerWithEmailAndPassword(email, password);
-    } else {
       await Auth().signInWithEmailAndPassword(email, password);
+    } else {
+      await Auth().registerWithEmailAndPassword(email, password);
     }
 
     setState(() => _loading = false);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,7 @@ class _RegistercreenState extends State<AuthScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Register",
+                  "Register Page",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(

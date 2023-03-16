@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 import 'auth/auth.dart';
 import 'auth/register.dart';
 import 'firebase_options.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,25 +17,22 @@ void main() async {
   runApp(const MyApp());
 }
 
-
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'To-Do List',
       theme: ThemeData(
         //textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         primarySwatch: Colors.blue,
       ),
-     home: StreamBuilder<User?>(
+      home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const ToDoList(
-              title: 'Your TodoList');
+            return const ToDoList(title: 'Your TodoList');
           } else {
             return const AuthScreen();
           }
@@ -43,7 +41,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -60,6 +57,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  
 
   handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -141,24 +139,56 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 ),
-const SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                  ),
-                  onPressed: () => handleSubmit(),
-                  child: _loading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () => handleSubmit(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
                           ),
-                        )
-                      : Text(_isLogin ? 'Login' : 'Register'),
+                          child: const Text(
+                            'Log In',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 16.0,
+                          height: 20,
+                        ),
+                       ElevatedButton(
+                          onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen())),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
+                          ),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ]
+                    )
+                  ],
                 ),
-                const SizedBox(height: 20), 
               ],
             ),
           ),
@@ -187,7 +217,6 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               //Use this to Log Out user
               FirebaseAuth.instance.signOut();
-               
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
@@ -214,6 +243,8 @@ class ToDoList extends StatefulWidget {
 
 class _ToDoListState extends State<ToDoList> {
   final List<String> _tasks = [];
+  
+  State<AuthScreen> createState() => _AuthScreenState();
 
   final TextEditingController _taskController = TextEditingController();
 
@@ -244,18 +275,17 @@ class _ToDoListState extends State<ToDoList> {
           onDismissed: (direction) {
             _removeTask(index);
           },
-         child: Card(
-          child: ListTile(
-            title: Text(_tasks[index]),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                _removeTask(index);
-      },
-      
-    ),
-  ),
-),
+          child: Card(
+            child: ListTile(
+              title: Text(_tasks[index]),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  _removeTask(index);
+                },
+              ),
+            ),
+          ),
         );
       },
       itemCount: _tasks.length,
@@ -289,9 +319,14 @@ class _ToDoListState extends State<ToDoList> {
           Expanded(
             child: _buildTaskList(),
           ),
+           ElevatedButton(
+              onPressed: () async {
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text('Déconnexion'),
+            )
         ],
       ),
     );
   }
 }
-
