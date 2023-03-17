@@ -6,19 +6,21 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'auth.dart';
 
-class RegisterScreen extends State<AuthScreen> {
+class RegisterScreen extends StatelessWidget {
   final bool _isLogin = false;
   bool _loading = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  RegisterScreen({super.key});
+
   handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
-    setState(() => _loading = true);
+    //setState(() => _loading = true);
 
     //Check if is login or register
     if (_isLogin) {
@@ -27,7 +29,7 @@ class RegisterScreen extends State<AuthScreen> {
       await Auth().registerWithEmailAndPassword(email, password);
     }
 
-    setState(() => _loading = false);
+    //setState(() => _loading = false);
   }
 
   @override
@@ -44,7 +46,7 @@ class RegisterScreen extends State<AuthScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Register Page",
+                  "Page de création de compte",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(
@@ -55,7 +57,7 @@ class RegisterScreen extends State<AuthScreen> {
                   controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Mettez un mail valide';
                     }
                     return null;
                   },
@@ -79,12 +81,12 @@ class RegisterScreen extends State<AuthScreen> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Mettez un mot de passe valide';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Password',
+                    hintText: 'Mot de Passe',
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -108,7 +110,7 @@ class RegisterScreen extends State<AuthScreen> {
                             strokeWidth: 2,
                           ),
                         )
-                      : const Text('Register'),
+                      : const Text('Créer votre compte'),
                 ),
               ],
             ),

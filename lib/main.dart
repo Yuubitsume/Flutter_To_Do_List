@@ -28,11 +28,12 @@ class MyApp extends StatelessWidget {
         //textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const ToDoList(title: 'Your TodoList');
+            return const ToDoList(title: 'Ma TodoList');
           } else {
             return const AuthScreen();
           }
@@ -90,7 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Log In",
+                  "Connexion",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(
@@ -101,12 +102,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Veuillez entrez votre email';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Email',
+                    hintText: 'mail',
                     focusColor: Colors.black,
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -125,12 +126,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Veuillez entrez votre mot de passe';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Password',
+                    hintText: 'Mot de passe',
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -139,10 +140,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 ),
+                //enveloppage des deux boutons et button "Se connecter"
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ElevatedButton(
@@ -153,9 +157,9 @@ class _AuthScreenState extends State<AuthScreen> {
                               horizontal: 16.0,
                               vertical: 12.0,
                             ),
-                          ),
+                          ), 
                           child: const Text(
-                            'Log In',
+                            'Se Connecter',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18.0,
@@ -166,9 +170,9 @@ class _AuthScreenState extends State<AuthScreen> {
                         const SizedBox(
                           width: 16.0,
                           height: 20,
-                        ),
-                       ElevatedButton(
-                          onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen())),
+                        ), // End button Se connecter
+                        //button "créer un compte"
+                      ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(
@@ -176,8 +180,14 @@ class _AuthScreenState extends State<AuthScreen> {
                               vertical: 12.0,
                             ),
                           ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RegisterScreen()),
+                            );
+                          },
                           child: const Text(
-                            'Register',
+                            'Créer un compte',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18.0,
@@ -185,15 +195,16 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
-                      ]
-                    )
+                       ]
+                      )
+                    ),
                   ],
                 ),
               ],
             ),
           ),
         ),
-      ),
+      )
     );
   }
 }
@@ -221,7 +232,7 @@ class HomeScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
             ),
-            child: const Text('Sign Out'),
+            child: const Text('Déconnecter'),
           ),
         ),
       ),
@@ -237,7 +248,6 @@ class ToDoList extends StatefulWidget {
   final String title;
 
   @override
-  // ignore: library_private_types_in_public_api
   _ToDoListState createState() => _ToDoListState();
 }
 
@@ -296,7 +306,7 @@ class _ToDoListState extends State<ToDoList> {
     return TextField(
       controller: _taskController,
       decoration: const InputDecoration(
-        labelText: 'Add a new task',
+        labelText: 'Ajouter une tâche',
       ),
       onSubmitted: (value) {
         _addTask(value);
