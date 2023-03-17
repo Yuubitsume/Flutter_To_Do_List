@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 import 'auth/auth.dart';
@@ -53,7 +52,6 @@ class AuthScreen extends StatefulWidget {
 /*Partie Authentification Screen */
 
 class _AuthScreenState extends State<AuthScreen> {
-  final bool _isLogin = false;
   bool _loading = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
@@ -67,12 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     setState(() => _loading = true);
 
-    //Check if is login or register
-    if (_isLogin) {
-      await Auth().registerWithEmailAndPassword(email, password);
-    } else {
       await Auth().signInWithEmailAndPassword(email, password);
-    }
 
     setState(() => _loading = false);
   }
@@ -80,6 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200], //Ajout du fond gris
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -183,7 +177,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => RegisterScreen()),
+                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
                             );
                           },
                           child: const Text(

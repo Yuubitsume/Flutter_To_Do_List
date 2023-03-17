@@ -6,35 +6,37 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'auth.dart';
 
-class RegisterScreen extends StatelessWidget {
-  final bool _isLogin = false;
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => RegisterScreenState();
+}
+
+/*Partie Authentification Screen */
+
+class RegisterScreenState extends State<RegisterScreen> {
   bool _loading = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  RegisterScreen({super.key});
 
   handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
-    //setState(() => _loading = true);
+    setState(() => _loading = true);
 
-    //Check if is login or register
-    if (_isLogin) {
-      await Auth().signInWithEmailAndPassword(email, password);
-    } else {
-      await Auth().registerWithEmailAndPassword(email, password);
-    }
+    await Auth().registerWithEmailAndPassword(email, password);
 
-    //setState(() => _loading = false);
+    setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -46,7 +48,7 @@ class RegisterScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Page de création de compte",
+                  "Créer un compte",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(
@@ -57,12 +59,12 @@ class RegisterScreen extends StatelessWidget {
                   controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Mettez un mail valide';
+                      return 'Veuillez entrez votre email';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Email',
+                    hintText: 'mail',
                     focusColor: Colors.black,
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -81,12 +83,12 @@ class RegisterScreen extends StatelessWidget {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Mettez un mot de passe valide';
+                      return 'Veuillez entrez votre mot de passe';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Mot de Passe',
+                    hintText: 'Mot de passe',
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -95,28 +97,71 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                  ),
-                  onPressed: () => handleSubmit(),
-                  child: _loading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
+                //enveloppage des deux boutons et button "Se connecter"
+                Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AuthScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
+                          ), 
+                          child: const Text(
+                            'Accueil',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
-                      : const Text('Créer votre compte'),
+                        ),
+                        const SizedBox(
+                          width: 16.0,
+                          height: 20,
+                        ), // End button Se connecter
+                        //button "créer un compte"
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
+                          ),
+                           onPressed: () => handleSubmit(),
+                           child: const Text(
+                            'Créer un compte',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                       ]
+                      )
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
         ),
-      ),
+      )
     );
   }
 }
