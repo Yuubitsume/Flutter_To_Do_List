@@ -6,17 +6,42 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import 'auth.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
+
   @override
-  State<RegisterScreen> createState() => RegisterScreenState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'To-Do List',
+      theme: ThemeData(
+        //textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        primarySwatch: Colors.blue,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const ToDoList(title: 'Ma TodoList');
+          } else {
+            return const AuthScreen();
+          }
+        },
+      ),
+    );
+  }
+}
+/*Partie Authentification Screen */
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+
+  @override
+  State<AuthScreen> createState() => AuthScreenState();
 }
 
-/*Partie Authentification Screen */
-
-class RegisterScreenState extends State<RegisterScreen> {
-  bool _loading = false;
+class AuthScreenState extends State<AuthScreen> {
+  bool isLogin = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -26,11 +51,16 @@ class RegisterScreenState extends State<RegisterScreen> {
     final email = _emailController.value.text;
     final password = _passwordController.value.text;
 
-    setState(() => _loading = true);
 
-    await Auth().registerWithEmailAndPassword(email, password);
+    //Check if is login or register
+    if (isLogin) {
+      await Auth().signInWithEmailAndPassword(email, password);
+      // connected = true;
+    } else {
+      await Auth().registerWithEmailAndPassword(email, password);
+      // connected = true;
+    }
 
-    setState(() => _loading = false);
   }
 
   @override
