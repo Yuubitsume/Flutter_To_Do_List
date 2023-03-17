@@ -34,27 +34,29 @@ class RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            //Add form to key to the Form Widget
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  "Créer un compte",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.grey[200],
+    body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          //Add form to key to the Form Widget
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "Créer un compte",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: TextFormField(
                   //Assign controller
                   controller: _emailController,
                   validator: (value) {
@@ -74,10 +76,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: TextFormField(
                   //Assign controller
                   controller: _passwordController,
                   obscureText: true,
@@ -97,8 +102,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                //enveloppage des deux boutons et button "Se connecter"
-                Column(
+              ),
+              //enveloppage des deux boutons et button "Se connecter"
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
@@ -134,7 +140,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           height: 20,
                         ), // End button Se connecter
                         //button "créer un compte"
-                      ElevatedButton(
+                        ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(
@@ -142,8 +148,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                               vertical: 12.0,
                             ),
                           ),
-                           onPressed: () => handleSubmit(),
-                           child: const Text(
+                          onPressed: () => handleSubmit(),
+                          child: const Text(
                             'Créer un compte',
                             style: TextStyle(
                               color: Colors.white,
@@ -152,16 +158,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                       ]
-                      )
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      ]
+                    )
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      )
-    );
-  }
+      ),
+    ),
+  );
+}
 }

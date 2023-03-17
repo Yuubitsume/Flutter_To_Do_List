@@ -91,7 +91,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
+                SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: TextFormField(
                   //Assign controller
                   controller: _emailController,
                   validator: (value) {
@@ -107,6 +109,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       borderSide: BorderSide(
                         color: Colors.black,
                         width: 2,
+                        ),
                       ),
                     ),
                   ),
@@ -114,7 +117,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
+                 SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: TextFormField(
                   //Assign controller
                   controller: _passwordController,
                   obscureText: true,
@@ -130,6 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       borderSide: BorderSide(
                         color: Colors.black,
                         width: 2,
+                        ),
                       ),
                     ),
                   ),
