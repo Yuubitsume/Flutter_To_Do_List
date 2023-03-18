@@ -45,6 +45,13 @@ class _AuthScreenState extends State<AuthScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
+                    "Bienvenue sur To-Do-List Master",
+                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
                     "Connexion",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
                   ),

@@ -74,6 +74,13 @@ class AuthScreenState extends State<RegisterAuthScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text(
+                  "Créer un compte sur To-Do-List Master",
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 const Text(
                   "Créer un compte",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
