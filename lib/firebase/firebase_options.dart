@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '825681413946',
     projectId: 'to-do-list-app-6869c',
     storageBucket: 'to-do-list-app-6869c.appspot.com',
-    iosClientId: '825681413946-m7om9rihefgc4tmcc7ktv1gskgjj1v5e.apps.googleusercontent.com',
+    iosClientId:
+        '825681413946-m7om9rihefgc4tmcc7ktv1gskgjj1v5e.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterToDoList',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '825681413946',
     projectId: 'to-do-list-app-6869c',
     storageBucket: 'to-do-list-app-6869c.appspot.com',
-    iosClientId: '825681413946-f84kkd90dhe5ps3t1i63eo7cvmb9kbod.apps.googleusercontent.com',
+    iosClientId:
+        '825681413946-f84kkd90dhe5ps3t1i63eo7cvmb9kbod.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterToDoList.RunnerTests',
   );
 }
