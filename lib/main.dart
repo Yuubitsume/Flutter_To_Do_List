@@ -16,6 +16,10 @@ void main() async {
   runApp(const MyApp());
 }
 
+void logout() async {
+  await FirebaseAuth.instance.signOut();
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -32,7 +36,20 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const ToDoList(title: 'Ma TodoList');
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Ma TodoList'),
+                actions: const [
+                  IconButton(
+                    onPressed: logout,
+                    icon: Icon(Icons.logout),
+                  ),
+                ],
+              ),
+              body: const ToDoList(
+                title: '',
+              ),
+            );
           } else {
             return const AuthScreen();
           }
@@ -56,7 +73,6 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
 
   handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
@@ -65,7 +81,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     setState(() => _loading = true);
 
-      await Auth().signInWithEmailAndPassword(email, password);
+    await Auth().signInWithEmailAndPassword(email, password);
 
     setState(() => _loading = false);
   }
@@ -73,139 +89,138 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], //Ajout du fond gris
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            //Add form to key to the Form Widget
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  "Connexion",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: TextFormField(
-                  //Assign controller
-                  controller: _emailController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrez votre email';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'mail',
-                    focusColor: Colors.black,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black,
-                        width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                 SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: TextFormField(
-                  //Assign controller
-                  controller: _passwordController,
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrez votre mot de passe';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Mot de passe',
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black,
-                        width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                //enveloppage des deux boutons et button "Se connecter"
-                Column(
+        backgroundColor: Colors.grey[200], //Ajout du fond gris
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              //Add form to key to the Form Widget
+              key: _formKey,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ElevatedButton(
-                          onPressed: () => handleSubmit(),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 12.0,
-                            ),
-                          ), 
-                          child: const Text(
-                            'Se Connecter',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Connexion",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: TextFormField(
+                      //Assign controller
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Veuillez entrez votre email';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'mail',
+                        focusColor: Colors.black,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2,
                           ),
                         ),
-                        const SizedBox(
-                          width: 16.0,
-                          height: 20,
-                        ), // End button Se connecter
-                        //button "créer un compte"
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 12.0,
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                            );
-                          },
-                          child: const Text(
-                            'Créer un compte',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                       ]
-                      )
+                      ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: TextFormField(
+                      //Assign controller
+                      controller: _passwordController,
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Veuillez entrez votre mot de passe';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Mot de passe',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //enveloppage des deux boutons et button "Se connecter"
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                ElevatedButton(
+                                  onPressed: () => handleSubmit(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 12.0,
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Se Connecter',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 16.0,
+                                  height: 20,
+                                ), // End button Se connecter
+                                //button "créer un compte"
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 12.0,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RegisterScreen()),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Créer un compte',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ])),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }
 
@@ -253,7 +268,7 @@ class ToDoList extends StatefulWidget {
 
 class _ToDoListState extends State<ToDoList> {
   final List<String> _tasks = [];
-  
+
   State<AuthScreen> createState() => _AuthScreenState();
 
   final TextEditingController _taskController = TextEditingController();
@@ -329,12 +344,12 @@ class _ToDoListState extends State<ToDoList> {
           Expanded(
             child: _buildTaskList(),
           ),
-           ElevatedButton(
-              onPressed: () async {
-                FirebaseAuth.instance.signOut();
-              },
-              child: const Text('Déconnexion'),
-            )
+          ElevatedButton(
+            onPressed: () async {
+              FirebaseAuth.instance.signOut();
+            },
+            child: const Text('Déconnexion'),
+          )
         ],
       ),
     );
