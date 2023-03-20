@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_to_do_list/functions/create_task.dart';
+import 'package:flutter_to_do_list/main.dart';
 import '../auth/auth.dart' as auth;
 import 'package:flutter_to_do_list/page/login.dart';
 

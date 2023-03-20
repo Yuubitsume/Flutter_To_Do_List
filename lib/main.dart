@@ -10,8 +10,12 @@ import 'page/login.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+    options: const FirebaseOptions(
+    apiKey: "AIzaSyDEm-wj6W_Qd86lIDtH77VekYZZ_79JDr0",
+    appId: "1:825681413946:web:4566d8696582d43dc67203",
+    messagingSenderId: "825681413946",
+    projectId: "to-do-list-app-6869c",
+  ));
   runApp(const MyApp());
 }
 

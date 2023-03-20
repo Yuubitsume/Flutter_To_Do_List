@@ -8,7 +8,6 @@ import '../auth/auth.dart';
 import '../page/register.dart';
 import 'package:flutter_to_do_list/main.dart';
 import '../firebase/firebase_options.dart';
-import 'package:flutter_to_do_list/main.dart';
 
 class ToDoList extends StatefulWidget {
   const ToDoList({Key? key, required this.title}) : super(key: key);
@@ -85,9 +84,6 @@ class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Column(
         children: [
           Padding(
@@ -97,12 +93,6 @@ class _ToDoListState extends State<ToDoList> {
           Expanded(
             child: _buildTaskList(),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              FirebaseAuth.instance.signOut();
-            },
-            child: const Text('Déconnexion'),
-          )
         ],
       ),
     );
