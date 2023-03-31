@@ -1,13 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 //import 'package:google_fonts/google_fonts.dart';
-
-import '../auth/auth.dart';
-import '../page/register.dart';
-import 'package:flutter_to_do_list/main.dart';
-import '../firebase/firebase_options.dart';
 
 class ToDoList extends StatefulWidget {
   const ToDoList({Key? key, required this.title}) : super(key: key);

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_to_do_list/functions/create_task.dart';
-import 'package:flutter_to_do_list/main.dart';
 import '../auth/auth.dart' as auth;
 import 'package:flutter_to_do_list/page/login.dart';
 
@@ -75,11 +74,11 @@ class AuthScreenState extends State<RegisterAuthScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "Créer un compte sur To-Do-List Master",
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 const Text(
